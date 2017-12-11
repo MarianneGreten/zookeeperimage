@@ -1,5 +1,7 @@
 FROM registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift
 
+USER root
+
 ENV ZOO_BASE=/opt/zookeeper
 ENV ZOO_USER=zookeeper \
     ZOO_CONF_DIR=${ZOO_BASE}/conf \
@@ -38,6 +40,7 @@ ARG DISTRO_NAME=zookeeper-3.3.6
 #
 
 RUN set -ex; \
+	whoami; \
     curl -o "$DISTRO_NAME.tar.gz" "https://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
     tar -xzf "$DISTRO_NAME.tar.gz"; \
     mkdir -p "$ZOO_CONF_DIR" "$ZOO_DATA_DIR" "$ZOO_DATA_LOG_DIR"; \
