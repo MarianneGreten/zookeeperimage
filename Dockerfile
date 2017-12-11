@@ -64,5 +64,6 @@ ENV PATH=$PATH:${ZOO_BASE}/${DISTRO_NAME}/bin \
 COPY entrypoint.sh /bin
 RUN set -ex; \
 	chmod +x /bin/entrypoint.sh
-ENTRYPOINT ["/bin/entrypoint.sh"]
-CMD ["zkServer.sh", "start-foreground"]
+#ENTRYPOINT ["/bin/entrypoint.sh"]
+#CMD ["zkServer.sh", "start-foreground"]
+CMD "sleep 10000"
