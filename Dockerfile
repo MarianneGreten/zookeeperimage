@@ -2,11 +2,12 @@ FROM registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift
 
 USER root
 
-ENV ZOO_BASE=/opt/zookeeper
+ENV ZOO_BASE=/opt/zookeeper \
+	ZOO_DATA=/var/zookeeper
 ENV ZOO_USER=zookeeper \
     ZOO_CONF_DIR=${ZOO_BASE}/conf \
-    ZOO_DATA_DIR=${ZOO_BASE}/data \
-    ZOO_DATA_LOG_DIR=${ZOO_BASE}/datalog \
+    ZOO_DATA_DIR=${ZOO_DATA}/data \
+    ZOO_DATA_LOG_DIR=${ZOO_DATA}/datalog \
     ZOO_PORT=2181 \
     ZOO_TICK_TIME=2000 \
     ZOO_INIT_LIMIT=5 \
@@ -40,22 +41,26 @@ ARG DISTRO_NAME=zookeeper-3.3.6
 #
 
 RUN set -ex; \
-	whoami; \
+	mkdir -p "$ZOO_BASE"
+	
+WORKDIR ${ZOO_BASE}
+
+RUN set -ex; \
     curl -o "$DISTRO_NAME.tar.gz" "https://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
     tar -xzf "$DISTRO_NAME.tar.gz"; \
     mkdir -p "$ZOO_CONF_DIR" "$ZOO_DATA_DIR" "$ZOO_DATA_LOG_DIR"; \
     mv "$DISTRO_NAME/conf/"* "$ZOO_CONF_DIR"; \
-    rm -rf "$DISTRO_NAME.tar.gz"; \
+    rm -rf "$DISTRO_NAME.tar.gz"
 
-WORKDIR $DISTRO_NAME
+WORKDIR ${ZOO_BASE}/${DISTRO_NAME}
+
 VOLUME ["$ZOO_DATA_DIR", "$ZOO_DATA_LOG_DIR"]
 
-#EXPOSE 2181 2888
-EXPOSE ${ZOO_PORT} 2888
+EXPOSE ${ZOO_PORT} 2888 3888
 
-ENV PATH=$PATH:/$DISTRO_NAME/bin \
+ENV PATH=$PATH:${ZOO_BASE}/${DISTRO_NAME}/bin \
     ZOOCFGDIR=${ZOO_CONF_DIR}
 
-COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /bin
+ENTRYPOINT ["/bin/entrypoint.sh"]
 CMD ["zkServer.sh", "start-foreground"]
