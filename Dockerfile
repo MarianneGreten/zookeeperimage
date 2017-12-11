@@ -39,6 +39,7 @@ ARG DISTRO_NAME=zookeeper-3.3.6
 RUN set -ex; \
     curl -o "$DISTRO_NAME.tar.gz" "https://www.apache.org/dist/zookeeper/$DISTRO_NAME/$DISTRO_NAME.tar.gz"; \
     tar -xzf "$DISTRO_NAME.tar.gz"; \
+    mkdir -p "$ZOO_CONF_DIR"; \
     mv "$DISTRO_NAME/conf/"* "$ZOO_CONF_DIR"; \
     rm -rf "$DISTRO_NAME.tar.gz"; \
 
