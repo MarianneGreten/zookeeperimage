@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift
 
+ENV ZOO_BASE=/opt/zookeeper
 ENV ZOO_USER=zookeeper \
-    ZOO_BASE=/opt/zookeeper \
     ZOO_CONF_DIR=${ZOO_BASE}/conf \
     ZOO_DATA_DIR=${ZOO_BASE}/data \
     ZOO_DATA_LOG_DIR=${ZOO_BASE}/datalog \
