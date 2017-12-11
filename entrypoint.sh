@@ -8,6 +8,10 @@ set -ex
 #    exec su-exec "$ZOO_USER" "$0" "$@"
 #fi
 
+whoami
+ls -ld $ZOO_CONF_DIR
+sleep 10000
+
 # Generate the config only if it doesn't exist
 if [[ ! -f "$ZOO_CONF_DIR/zoo.cfg" ]]; then
     CONFIG="$ZOO_CONF_DIR/zoo.cfg"
