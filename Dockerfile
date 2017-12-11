@@ -62,7 +62,10 @@ ENV PATH=$PATH:${ZOO_BASE}/${DISTRO_NAME}/bin \
     ZOOCFGDIR=${ZOO_CONF_DIR}
 
 COPY entrypoint.sh /bin
+
 RUN set -ex; \
-	chmod +x /bin/entrypoint.sh
+	chmod +x /bin/entrypoint.sh; \
+	chmod a+w $ZOO_DATA_DIR $ZOO_CONF_DIR $ZOO_DATA_LOG_DIR
+		
 ENTRYPOINT ["/bin/entrypoint.sh"]
 CMD ["zkServer.sh", "start-foreground"]
